@@ -1,0 +1,48 @@
+1) 🛠 Problem Faced (Flutter - initState + Provider Context Error):
+Tried calling Provider.of(context) inside initState, which triggered setState() or markNeedsBuild() called during build error. This happened because the widget tree wasn’t fully built yet, and notifying listeners too early caused a conflict.
+✅ Solution & Why:
+Wrapped the provider call inside WidgetsBinding.instance.addPostFrameCallback(...) to delay execution until after the first build. This ensured context was safely available and avoided build phase conflicts.
+
+@override
+void initState() {
+  super.initState();
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    Provider.of<HomepageController>(context, listen: false).fetchData();
+  });
+}
+🧠 Lesson:
+Always delay Provider.of(context) or any setState() logic inside initState using addPostFrameCallback when context needs to be used safely. It avoids calling build-related logic too early.
+
+
+
+20/06/25
+🔑 Hive Update/Delete Summary (Safe Code Practices)
+✅ Problem Faced:
+Used putAt(index) and delete(index)
+❌ Dangerous after deletions — Hive’s internal index ≠ key
+✅ Why It’s Risky:
+Hive keys stay constant, but list indexes shift after delete
+Can update or delete the wrong item or crash the app
+✅ Safe Solution:
+Always use: final key = box.keyAt(index);
+Then:
+🟢 For update: box.put(key, updatedExpense)
+🟢 For delete: box.delete(key)
+🧹 Controller Cleanup:
+Always clear TextEditingController after use
+Prevents input carryover and UI bugs
+✍️ Prefill Editing Dialog:
+Use: controller.text = oldValue; instead of hintText
+Makes editing smoother and more intuitive
+🔄 Always fetch after DB change:
+After any update/delete, call fetchData() and notifyListeners()
+🧠 Memory Hook:
+"List index is not Hive key – always use keyAt(index) to stay safe!"
+
+20/06/25
+| Question                                    | Answer                                                                       |
+| ------------------------------------------- | ---------------------------------------------------------------------------- |
+| Why doesn't Hive start from 0 after delete? | Because `box.add()` uses a persistent internal counter (not reset on clear). |
+| Where is this logic defined?                | Inside Hive’s internal box implementation.                                   |
+| How to reset key counter?                   | Use `Hive.deleteBoxFromDisk(boxName)` — deletes data + resets key index.     |
+| Should I worry about this in UI?            | No, as long as you map UI index → `_expenseKeys[index]`.                     |
