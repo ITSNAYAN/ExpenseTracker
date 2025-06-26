@@ -9,3 +9,8 @@
    return "${dateTime.day}-${dateTime.month}-${dateTime.year}" ;
   }
 
+  // calculate the numbers of month since between two dates
+  int calculateMonthCount ( int startYear , startMonth , currentYear, currentMonth){
+  int month = (currentYear-startYear)*12 + currentMonth-startMonth+1;
+  return month;
+  }

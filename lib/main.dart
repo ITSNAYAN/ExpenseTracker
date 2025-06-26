@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_expense_tracker/controller/bar_screen_controller.dart';
 import 'package:flutter_expense_tracker/controller/home_page_controller.dart';
 import 'package:flutter_expense_tracker/expense_database/hive_intializer.dart';
+import 'package:flutter_expense_tracker/view/bar_graph_screen/bar_screen.dart';
 import 'package:flutter_expense_tracker/view/home_page.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +20,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => HomepageController()),
+        ChangeNotifierProvider(create: (context) => BarScreenController()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -25,7 +28,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         ),
-        home: HomePage(),
+        home: BarScreen(),
       ),
     );
   }

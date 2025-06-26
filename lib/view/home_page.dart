@@ -31,6 +31,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(title : Center(child: Text("Your Expense")), backgroundColor: Colors.transparent),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _controller.openNewExpense(context),
+        // onPressed: () => _controller.openNewExpense(context),
         child: Icon(Icons.add),
       ),
       body: SafeArea(
@@ -59,6 +60,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(children: []),
         ),
       ),
+
     );
   }
 }
