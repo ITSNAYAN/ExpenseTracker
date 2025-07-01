@@ -1,0 +1,266 @@
+# 📊 Building a Dynamic Bar Graph in a Flutter Expense Tracker App
+
+Creating a visually appealing and dynamic bar chart in an expense tracker app can enhance user experience by providing clear financial insights. In this guide, we’ll build a **bar graph that dynamically reflects monthly expenses** using the `fl_chart` package, synced with your **Hive database**. This article is tailored for Flutter developers working on an **expense tracker app**.
+
+---
+
+## 🔧 Tools & Packages Used
+
+* `Hive` - For local NoSQL data storage.
+* `Provider` - For state management.
+* `fl_chart` - To render the bar chart.
+
+---
+
+## 🧱 Step 1: Set Up Your Hive Database for Expenses
+
+First, create an `ExpenseAdapter` model and ensure Hive is initialized in your app.
+
+```dart
+class ExpenseAdapter extends HiveObject {
+  DateTime? dateTime;
+  double? amount;
+  // other fields like category, description etc.
+}
+```
+
+Initialize Hive in your `main.dart`:
+
+```dart
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(ExpenseAdapterAdapter());
+  await Hive.openBox<ExpenseAdapter>('expenseBox');
+  runApp(MyApp());
+}
+```
+
+---
+
+## 🧠 Step 2: Create a BarScreenController
+
+This controller reads all the expense data and prepares a map of monthly totals.
+
+```dart
+class BarScreenController extends ChangeNotifier {
+  final box = Hive.box<ExpenseAdapter>('expenseBox');
+  List<ExpenseAdapter> _allExpenses = [];
+  Future<Map<int, double>>? _monthlyTotalsFuture;
+
+  Future<Map<int, double>> get monthlyTotalsFuture => _monthlyTotalsFuture ?? Future.value({});
+
+  Future<void> initController() async {
+    _allExpenses = box.values.toList();
+    _monthlyTotalsFuture = calculateMonthlyTotals();
+    notifyListeners();
+  }
+```
+
+🔍 **What's happening here?**
+
+* We collect all expenses from the Hive box.
+* Then call `calculateMonthlyTotals()` to prepare the data needed for our bar chart.
+
+```dart
+  Future<Map<int, double>> calculateMonthlyTotals() async {
+    final List<ExpenseAdapter> allExpenses = box.values.toList();
+    Map<int, double> map = {};
+    for (var expense in allExpenses) {
+      final date = expense.dateTime!;
+      int key = date.year * 100 + date.month;
+      map[key] = (map[key] ?? 0.0) + expense.amount!;
+    }
+    return map;
+  }
+```
+
+📌 **What's this key?**
+The key is `year * 100 + month` to uniquely identify each month in the format `YYYYMM`.
+
+```dart
+  int getStartMonth() => _allExpenses.isEmpty
+      ? DateTime.now().month
+      : _allExpenses..sort((a, b) => a.dateTime!.compareTo(b.dateTime!)).first.dateTime!.month;
+
+  int getStartYear() => _allExpenses.isEmpty
+      ? DateTime.now().year
+      : _allExpenses..sort((a, b) => a.dateTime!.compareTo(b.dateTime!)).first.dateTime!.year;
+```
+
+```dart
+  List<double> generateMonthlySummary(
+      Map<int, double> monthlyTotals, int startMonth, int startYear, int count) {
+    return List.generate(count, (index) {
+      int year = startYear + ((startMonth - 1 + index) ~/ 12);
+      int month = (startMonth - 1 + index) % 12 + 1;
+      int key = year * 100 + month;
+      return monthlyTotals[key] ?? 0.0;
+    });
+  }
+}
+```
+
+🎯 **Purpose of this method?**
+It creates a list of 12 months of expense values, starting from the first expense month to the current.
+
+---
+
+## 🧑‍🎨 Step 3: Build the UI with a Bar Chart
+
+```dart
+class BarScreen extends StatefulWidget {
+  const BarScreen({super.key});
+  @override
+  State<BarScreen> createState() => _BarScreenState();
+}
+
+class _BarScreenState extends State<BarScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<BarScreenController>(context, listen: false).initController();
+    });
+  }
+```
+
+📌 **Why `addPostFrameCallback`?**
+It ensures data is fetched after the widget is built.
+
+```dart
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<BarScreenController>(
+      builder: (context, value, child) {
+        int startMonth = value.getStartMonth();
+        int startYear = value.getStartYear();
+        int monthCount = calculateMonthCount(startYear, startMonth, DateTime.now().year, DateTime.now().month);
+
+        return Scaffold(
+          body: FutureBuilder(
+            future: value.monthlyTotalsFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Text("Error: ${snapshot.error}");
+              }
+              final data = snapshot.data ?? {};
+              final monthlySummary = value.generateMonthlySummary(data, startMonth, startYear, monthCount);
+
+              return Padding(
+                padding: const EdgeInsets.only(top: 100.0),
+                child: MyBarGraph(monthlySummary: monthlySummary, startMonth: startMonth),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+```
+
+**Helper function to count total months:**
+
+```dart
+int calculateMonthCount(int startYear, int startMonth, int currentYear, int currentMonth) {
+  return (currentYear - startYear) * 12 + (currentMonth - startMonth) + 1;
+}
+```
+
+---
+
+## 📊 Step 4: Bar Graph Widget
+
+```dart
+class MyBarGraph extends StatelessWidget {
+  final List<double> monthlySummary;
+  final int startMonth;
+
+  const MyBarGraph({super.key, required this.monthlySummary, required this.startMonth});
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1.5,
+      child: BarChart(
+        BarChartData(
+          maxY: monthlySummary.reduce((a, b) => a > b ? a : b) + 20,
+          barTouchData: BarTouchData(enabled: true),
+          titlesData: FlTitlesData(
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                interval: 1,
+                getTitlesWidget: (double value, _) {
+                  int month = (startMonth + value.toInt() - 1) % 12 + 1;
+                  return Text(monthName(month), style: const TextStyle(fontSize: 10));
+                },
+              ),
+            ),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                getTitlesWidget: (value, _) => Text('${(value ~/ 1000) > 0 ? (value / 1000).toStringAsFixed(1) + 'k' : value.toInt()}'),
+              ),
+            ),
+          ),
+          borderData: FlBorderData(show: false),
+          barGroups: monthlySummary
+              .asMap()
+              .map((index, amount) => MapEntry(
+                  index,
+                  BarChartGroupData(
+                    x: index,
+                    barRods: [
+                      BarChartRodData(toY: amount, width: 16, color: Colors.black),
+                    ],
+                  )))
+              .values
+              .toList(),
+        ),
+      ),
+    );
+  }
+
+  String monthName(int monthNumber) {
+    const monthNames = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return monthNames[monthNumber];
+  }
+}
+```
+
+🖌️ **Explanation:**
+
+* `monthlySummary.reduce(...) + 20` sets a suitable max Y value.
+* Only months with data are rendered as bars.
+* X-axis uses `monthName()` for labeling.
+* Y-axis simplifies thousands to `k` format.
+
+---
+
+## ✅ Final Output
+
+You’ll get a bar chart:
+
+* That shows **months on X-axis**.
+* **Total expenses per month on Y-axis**.
+* Updates automatically when expenses are added in the database.
+* Shows bars **only for months where expenses exist**.
+
+---
+
+## 📝 Recap
+
+* ✅ Setup Hive and `ExpenseAdapter`.
+* ✅ Build a controller to process monthly totals.
+* ✅ Use `FutureBuilder` and `Consumer` to sync data.
+* ✅ Render a dynamic, minimal bar graph using `fl_chart`.
+
+This approach is scalable, clean, and useful in any expense tracking app.
+
+---
+
+Would you like a **PDF version** of this guide or to convert it into a **Medium-style blog post**?

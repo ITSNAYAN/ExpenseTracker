@@ -29,6 +29,7 @@ class HomepageController extends ChangeNotifier {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Color(0xfff7f6cf),
         title: Text("New Expense"),
         actions: [_cancelButton(context), _createNewDataBase(context)],
         content: Column(

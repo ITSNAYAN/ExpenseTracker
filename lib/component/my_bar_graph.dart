@@ -26,12 +26,12 @@ class MyBarGraph extends StatelessWidget {
             maxY: (monthlySummary.reduce((a, b) => a > b ? a : b)) + 20,
             gridData: FlGridData(show: false),
             borderData: FlBorderData(show: false),
-            backgroundColor: Colors.red,
-            // barTouchData: BarTouchData(enabled: true),
+            // backgroundColor: Colors.red,
+             barTouchData: BarTouchData(enabled: true),
             titlesData: FlTitlesData(
               leftTitles: AxisTitles(
                 sideTitles: SideTitles(
-                  showTitles: true,
+                  showTitles: false,
                   interval: 100, // Adjust based on your range
                   getTitlesWidget: (value, _) => Padding(
                     padding: const EdgeInsets.only(right: 8.0,left: 10.0),
@@ -56,8 +56,7 @@ class MyBarGraph extends StatelessWidget {
                     final month = (value.toInt() % 12) + 1;
                     return Padding(
                       padding: const EdgeInsets.only(top: 4),
-                      child: Text(
-                        monthName(month),
+                      child: Text(monthName(month),
                         style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
                       ),
                     );
@@ -77,8 +76,7 @@ class MyBarGraph extends StatelessWidget {
                   toY: entry.value,
                   width: 20,
                   color: entry.value == 0.0 ? Colors.black : Colors.black,
-
-                  borderRadius: BorderRadius.zero,
+                  borderRadius:BorderRadius.only(topLeft: Radius.circular(14),topRight: Radius.circular(14)),
                 )
               ],
             ))

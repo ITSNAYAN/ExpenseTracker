@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/controller/home_page_controller.dart';
 import 'package:flutter_expense_tracker/core/helperFunction/convert_function.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../component/my_list_tile.dart';
@@ -28,10 +29,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final _controller = Provider.of<HomepageController>(context, listen: false);
     return Scaffold(
-      appBar: AppBar(title : Center(child: Text("Your Expense")), backgroundColor: Colors.transparent),
+      appBar: AppBar(title : Center(child: Text("Your Expense",style: GoogleFonts.saira(),)), backgroundColor: Colors.transparent),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _controller.openNewExpense(context),
-        // onPressed: () => _controller.openNewExpense(context),
         child: Icon(Icons.add),
       ),
       body: SafeArea(
@@ -57,7 +57,9 @@ class _HomePageState extends State<HomePage> {
                     },
                   );
           },
-          child: Column(children: []),
+          child: Column(children: [
+
+          ]),
         ),
       ),
 

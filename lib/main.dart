@@ -4,6 +4,7 @@ import 'package:flutter_expense_tracker/controller/home_page_controller.dart';
 import 'package:flutter_expense_tracker/expense_database/hive_intializer.dart';
 import 'package:flutter_expense_tracker/view/bar_graph_screen/bar_screen.dart';
 import 'package:flutter_expense_tracker/view/home_page.dart';
+import 'package:flutter_expense_tracker/view/landing_page/landing_page_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -26,9 +27,12 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xff98FBCB), brightness: Brightness.light,),
+           scaffoldBackgroundColor: Color(0xfff7f6cf),
+        //  scaffoldBackgroundColor: Colors.yellow,
+
         ),
-        home: BarScreen(),
+        home: LandingPageScreen(),
       ),
     );
   }
