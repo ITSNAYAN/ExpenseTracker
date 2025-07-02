@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker/component/tab_switch_controller.dart';
+import 'package:flutter_expense_tracker/component/customBottomNavigationButton/tab_switch_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 

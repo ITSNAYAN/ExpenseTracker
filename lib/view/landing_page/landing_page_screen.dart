@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker/component/custom_bottom_navigation_button.dart';
-import 'package:flutter_expense_tracker/component/tab_switch_controller.dart';
+import 'package:flutter_expense_tracker/component/customBottomNavigationButton/custom_bottom_navigation_button.dart';
+import 'package:flutter_expense_tracker/component/customBottomNavigationButton/tab_switch_controller.dart';
 import 'package:provider/provider.dart';
 
 import '../bar_graph_screen/bar_screen.dart';
