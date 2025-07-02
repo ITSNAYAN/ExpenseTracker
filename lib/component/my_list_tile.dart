@@ -58,12 +58,12 @@ class MyListTile extends StatelessWidget {
               color: Colors.grey.shade300, // soft minimal color
               width: 0.5, // minimal border width
             ),
-            color: Color(0xff98FBCB),
+            color: Color(0xffad853a),
           ),
           child: ListTile(
-            leading: Text(leading,style: GoogleFonts.saira(),),
-            title: Center(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.saira(),)),
-            trailing: Text(trailing,style: GoogleFonts.saira(), textAlign: TextAlign.end),
+            leading: Text(leading,style: GoogleFonts.saira(color: Colors.white),),
+            title: Center(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.saira(color: Colors.white),)),
+            trailing: Text(trailing,style: GoogleFonts.saira(color: Colors.white), textAlign: TextAlign.end),
           ),
         ),
       ),

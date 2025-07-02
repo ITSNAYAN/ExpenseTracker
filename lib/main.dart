@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_expense_tracker/component/tab_switch_controller.dart';
 import 'package:flutter_expense_tracker/controller/bar_screen_controller.dart';
 import 'package:flutter_expense_tracker/controller/home_page_controller.dart';
 import 'package:flutter_expense_tracker/expense_database/hive_intializer.dart';
@@ -22,13 +23,14 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => HomepageController()),
         ChangeNotifierProvider(create: (context) => BarScreenController()),
+        ChangeNotifierProvider(create: (context) => TabSwitchController()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xff98FBCB), brightness: Brightness.light,),
-           scaffoldBackgroundColor: Color(0xfff7f6cf),
+          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xffad853a), brightness: Brightness.light,),
+           scaffoldBackgroundColor: Color(0xffdfde94),
         //  scaffoldBackgroundColor: Colors.yellow,
 
         ),

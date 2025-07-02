@@ -1,21 +1,16 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_expense_tracker/component/tab_switch_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
-class CustomBottomNavigationButton extends StatefulWidget {
+class CustomBottomNavigationButton extends StatelessWidget {
   const CustomBottomNavigationButton({super.key});
 
   @override
-  State<CustomBottomNavigationButton> createState() =>
-      _CustomBottomNavigationButtonState();
-}
-
-class _CustomBottomNavigationButtonState
-    extends State<CustomBottomNavigationButton> {
-  bool isExpenseSelected = true;
-
-  @override
   Widget build(BuildContext context) {
+    final tabSwitchController = Provider.of<TabSwitchController>(context);
+
     return Container(
       height: 50,
       width: 180,
@@ -25,9 +20,9 @@ class _CustomBottomNavigationButtonState
       ),
       child: Stack(
         children: [
-          // Sliding Glassy Effect
+          // Sliding background
           AnimatedAlign(
-            alignment: isExpenseSelected
+            alignment: tabSwitchController.selectExpenseValue
                 ? Alignment.centerLeft
                 : Alignment.centerRight,
             duration: const Duration(milliseconds: 300),
@@ -45,22 +40,27 @@ class _CustomBottomNavigationButtonState
                 borderRadius: BorderRadius.circular(24),
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                  child: const SizedBox(), // Glass effect only
+                  child: const SizedBox(), // Glassy blur
                 ),
               ),
             ),
           ),
 
-          // Static Text Labels with Tap
+          // Tappable Tabs
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildTab(text: "Expense", isSelected: isExpenseSelected, onTap: () {
-                setState(() => isExpenseSelected = true);
-              }),
-              _buildTab(text: "Analysis", isSelected: !isExpenseSelected, onTap: () {
-                setState(() => isExpenseSelected = false);
-              }),
+              _buildTab(
+                context,
+                "Expense",
+                tabSwitchController.selectExpenseValue,
+                tabSwitchController.onTapExpense,
+              ),
+              _buildTab(
+                context,
+                "Analysis",
+                !tabSwitchController.selectExpenseValue,
+                tabSwitchController.onTapAnalysis,
+              ),
             ],
           ),
         ],
@@ -68,28 +68,34 @@ class _CustomBottomNavigationButtonState
     );
   }
 
-  Widget _buildTab({
-    required String text,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildTab(
+      BuildContext context,
+      String text,
+      bool isSelected,
+      VoidCallback onTap,
+      ) {
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
         child: Center(
-          child:isSelected? Text(
-            text,
-            style: GoogleFonts.saira(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
-          ):Text(
-            text,
-            style: GoogleFonts.saira(
-              fontSize: 14,
-               fontWeight: FontWeight.w600,
-              color: Colors.grey[600],
+          child: AnimatedSwitcher(
+            duration: Duration(milliseconds: 300),
+            transitionBuilder: (child,animation){
+              return FadeTransition(opacity: animation,
+                child: TweenAnimationBuilder(tween: Tween<double>(begin: 4.0,end: 0.0 ), duration: Duration(milliseconds: 300), builder: (context,sigma,_){
+                  return ImageFiltered(imageFilter: ImageFilter.blur(sigmaX: sigma,sigmaY: sigma),
+                  child: child,);
+                }),
+              );
+            },
+            child: Text(
+              text,
+              key: ValueKey(isSelected),
+              style: GoogleFonts.saira(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: isSelected ? Colors.black : Colors.grey[600],
+              ),
             ),
           ),
         ),

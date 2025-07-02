@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final _controller = Provider.of<HomepageController>(context, listen: false);
     return Scaffold(
-      appBar: AppBar(title : Center(child: Text("Your Expense",style: GoogleFonts.saira(),)), backgroundColor: Colors.transparent),
+      appBar: AppBar(title : Center(child: Text("Your Expense",style: GoogleFonts.saira(  color: Color(0xffad853a),fontWeight: FontWeight.bold),)), backgroundColor: Colors.transparent),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _controller.openNewExpense(context),
         child: Icon(Icons.add),
