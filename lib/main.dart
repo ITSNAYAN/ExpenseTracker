@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_expense_tracker/component/customAppBar/theme_toggle_button_controller.dart';
 import 'package:flutter_expense_tracker/component/customBottomNavigationButton/tab_switch_controller.dart';
 import 'package:flutter_expense_tracker/controller/bar_screen_controller.dart';
 import 'package:flutter_expense_tracker/controller/home_page_controller.dart';
+import 'package:flutter_expense_tracker/core/AppColor/app_Color.dart';
 import 'package:flutter_expense_tracker/expense_database/hive_intializer.dart';
 import 'package:flutter_expense_tracker/view/bar_graph_screen/bar_screen.dart';
-import 'package:flutter_expense_tracker/view/home_page.dart';
+import 'package:flutter_expense_tracker/view/home_page/home_page.dart';
 import 'package:flutter_expense_tracker/view/landing_page/landing_page_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -24,17 +26,17 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => HomepageController()),
         ChangeNotifierProvider(create: (context) => BarScreenController()),
         ChangeNotifierProvider(create: (context) => TabSwitchController()),
+        ChangeNotifierProvider(create: (context) => ThemeToggleButtonController()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xffad853a), brightness: Brightness.light,),
-           scaffoldBackgroundColor: Color(0xffdfde94),
-        //  scaffoldBackgroundColor: Colors.yellow,
+          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xff9b7734), brightness: Brightness.light,),
+           scaffoldBackgroundColor: AppColor.primaryColor,
 
         ),
-        home: LandingPageScreen(),
+        home: HomePage(),
       ),
     );
   }

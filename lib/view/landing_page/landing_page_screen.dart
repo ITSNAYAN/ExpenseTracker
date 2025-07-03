@@ -5,7 +5,7 @@ import 'package:flutter_expense_tracker/component/customBottomNavigationButton/t
 import 'package:provider/provider.dart';
 
 import '../bar_graph_screen/bar_screen.dart';
-import '../home_page.dart';
+import '../home_page/home_page.dart';
 
 class LandingPageScreen extends StatelessWidget {
   const LandingPageScreen({super.key});

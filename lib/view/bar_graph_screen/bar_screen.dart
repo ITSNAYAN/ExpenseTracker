@@ -1,7 +1,9 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker/component/my_bar_graph.dart';
+import 'package:flutter_expense_tracker/component/customAppBar/customAppBar.dart';
+
+import 'package:flutter_expense_tracker/component/myBarGraph/my_bar_graph.dart';
 import 'package:flutter_expense_tracker/controller/bar_screen_controller.dart';
 import 'package:flutter_expense_tracker/core/helperFunction/convert_function.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,10 +22,8 @@ class _BarScreenState extends State<BarScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<BarScreenController>(context, listen: false).initController();
-     // Provider.of<BarScreenController>(context, listen: false).calculateMonthlyTotals() ;
+      // Provider.of<BarScreenController>(context, listen: false).calculateMonthlyTotals() ;
     });
-
-
   }
 
   @override
@@ -36,12 +36,10 @@ class _BarScreenState extends State<BarScreen> {
         int currentMonth = DateTime.now().month;
         int currentYear = DateTime.now().year;
         // calculate the number of month since the first month and current month
-       // int monthCount = calculateMonthCount(startYear, startMonth, currentYear, currentMonth);
+        // int monthCount = calculateMonthCount(startYear, startMonth, currentYear, currentMonth);
 
         return Scaffold(
-
-            appBar: AppBar(title : Center(child: Text("Spend Analysis",style: GoogleFonts.saira(),)), backgroundColor: Colors.transparent),
-
+           appBar: CustomAppBar(text: 'Spend Analysis'),
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.only(top: 200.0),
@@ -56,8 +54,8 @@ class _BarScreenState extends State<BarScreen> {
                       if (snapshot.hasError) {
                         return Text("Error:${snapshot.error}");
                       }
-                      final data = snapshot.data??{ };
-                      final monthlySummary =value.generate12MonthSummary(data, startYear, );
+                      final data = snapshot.data ?? {};
+                      final monthlySummary = value.generate12MonthSummary(data, startYear);
                       return MyBarGraph(monthlySummary: monthlySummary, startMonth: 1);
                     },
                   ),
