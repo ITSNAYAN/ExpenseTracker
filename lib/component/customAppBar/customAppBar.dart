@@ -31,7 +31,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
       onPressed: () {
         controller.onSelectTheme();
       },
-      icon:  Icon(controller.isThemeSelect? Icons.light_mode : Icons.dark_mode));
+      icon:  Icon(controller.isLightThemeSelect? Icons.light_mode : Icons.dark_mode));
   }
 
   @override

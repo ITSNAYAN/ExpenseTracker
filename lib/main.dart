@@ -21,22 +21,33 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData lightTheme = ThemeData(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: AppColor.secondaryLightColor,
+        brightness: Brightness.light,
+      ),
+      scaffoldBackgroundColor: AppColor.primaryLightColor,
+    );
+    final ThemeData darkTheme = ThemeData(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: AppColor.secondaryDarkColor,
+        brightness: Brightness.light,
+      ),
+      scaffoldBackgroundColor: AppColor.primaryDarkColor,
+    );
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => HomepageController()),
         ChangeNotifierProvider(create: (context) => BarScreenController()),
         ChangeNotifierProvider(create: (context) => TabSwitchController()),
-        ChangeNotifierProvider(create: (context) => ThemeToggleButtonController()),
+        ChangeNotifierProvider(
+          create: (context) => ThemeToggleButtonController(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xff9b7734), brightness: Brightness.light,),
-           scaffoldBackgroundColor: AppColor.primaryColor,
-
-        ),
-        home: HomePage(),
+        home: LandingPageScreen(),
       ),
     );
   }

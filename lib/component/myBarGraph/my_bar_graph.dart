@@ -37,7 +37,6 @@ class _MyBarGraphState extends State<MyBarGraph> {
   Widget build(BuildContext context) {
     double barWidth = 20;
     double spaceBetween = 15;
-
     return SizedBox(
       height: 300,
       child: SingleChildScrollView(
@@ -51,7 +50,26 @@ class _MyBarGraphState extends State<MyBarGraph> {
               gridData: FlGridData(show: false),
               borderData: FlBorderData(show: false),
               // backgroundColor: Colors.red,
-              barTouchData: BarTouchData(enabled: true),
+              barTouchData: BarTouchData(
+                enabled: true,
+                touchTooltipData: BarTouchTooltipData(
+                  // tooltipBgColor: Colors.black.withOpacity(0.7),
+                  // tooltipRoundedRadius: 10,
+                  tooltipPadding: const EdgeInsets.all(8),
+                  fitInsideVertically: true, // <--- important!
+                  fitInsideHorizontally: true,
+                  getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                    return BarTooltipItem(
+                      '₹${rod.toY.toStringAsFixed(0)}',
+                      const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  },
+                ),
+              ),
+
               titlesData: FlTitlesData(
                 leftTitles: AxisTitles(
                   sideTitles: SideTitles(
