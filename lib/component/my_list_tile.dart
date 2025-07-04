@@ -22,6 +22,8 @@ class MyListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData color = Theme.of(context);
+    Con().callApi();
     return Slidable(
       endActionPane: ActionPane(
         motion: const StretchMotion(),
@@ -58,15 +60,21 @@ class MyListTile extends StatelessWidget {
               color: Colors.grey.shade300, // soft minimal color
               width: 0.5, // minimal border width
             ),
-            color: Color(0xff9b7734),
+            color: color.colorScheme.secondary,
           ),
           child: ListTile(
-            leading: Text(leading,style: GoogleFonts.saira(color: Colors.white),),
-            title: Center(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.saira(color: Colors.white),)),
-            trailing: Text(trailing,style: GoogleFonts.saira(color: Colors.white), textAlign: TextAlign.end),
+            leading: Text(leading,style: GoogleFonts.saira(color:color.colorScheme.primary ),),
+            title: Center(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.saira(color:color.colorScheme.primary),)),
+            trailing: Text(trailing,style: GoogleFonts.saira(color:color.colorScheme.primary ), textAlign: TextAlign.end),
           ),
         ),
       ),
     );
+  }
+}
+
+class Con{
+  void callApi(){
+    print("----- Api Called");
   }
 }

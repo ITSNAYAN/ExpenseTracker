@@ -16,7 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
          centerTitle: true,
         title: Text(
           text,
-          style: GoogleFonts.saira(color: Color(0xff9b7734), fontWeight: FontWeight.bold),
+          style: GoogleFonts.saira(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
         leading: themeToggleButton(context),
@@ -31,7 +31,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
       onPressed: () {
         controller.onSelectTheme();
       },
-      icon:  Icon(controller.isLightThemeSelect? Icons.light_mode : Icons.dark_mode));
+      icon:  Icon(controller.isLightThemeSelect? Icons.light_mode : Icons.dark_mode,color: Theme.of(context).colorScheme.secondary));
   }
 
   @override

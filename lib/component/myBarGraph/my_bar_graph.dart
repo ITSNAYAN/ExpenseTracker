@@ -56,7 +56,7 @@ class _MyBarGraphState extends State<MyBarGraph> {
                   // tooltipBgColor: Colors.black.withOpacity(0.7),
                   // tooltipRoundedRadius: 10,
                   tooltipPadding: const EdgeInsets.all(8),
-                  fitInsideVertically: true, // <--- important!
+                  fitInsideVertically: true,
                   fitInsideHorizontally: true,
                   getTooltipItem: (group, groupIndex, rod, rodIndex) {
                     return BarTooltipItem(
@@ -94,7 +94,7 @@ class _MyBarGraphState extends State<MyBarGraph> {
                       final month = (value.toInt() % 12) + 1;
                       return Padding(
                         padding: const EdgeInsets.only(top: 4, left: 3, right: 3),
-                        child: Text(monthName(month), style: GoogleFonts.saira(fontSize: 12, fontWeight: FontWeight.w800,color: Color(0xff9b7734))),
+                        child: Text(monthName(month), style: GoogleFonts.saira(fontSize: 12, fontWeight: FontWeight.w800,color: Theme.of(context).colorScheme.secondary,)),
                       );
                     },
                   ),
@@ -112,7 +112,7 @@ class _MyBarGraphState extends State<MyBarGraph> {
                         BarChartRodData(
                           toY: entry.value,
                           width: 25,
-                          color: entry.value == 0.0 ? Color(0xff9b7734) : Color(0xffad853a),
+                          color: entry.value == 0.0 ? Theme.of(context).colorScheme.secondary : Theme.of(context).colorScheme.secondary,
                           borderRadius: BorderRadius.only(topLeft: Radius.circular(14), topRight: Radius.circular(14)),
                         ),
                       ],

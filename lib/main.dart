@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveInitializer.initHive();
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(create: (context) => ThemeToggleButtonController(), child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -21,9 +21,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeToggleButtonController>(context);
+    print("~~~~~~");
     final ThemeData lightTheme = ThemeData(
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColor.secondaryLightColor,
+        primary: AppColor.primaryLightColor,
+        secondary: AppColor.secondaryLightColor,
         brightness: Brightness.light,
       ),
       scaffoldBackgroundColor: AppColor.primaryLightColor,
@@ -31,7 +35,9 @@ class MyApp extends StatelessWidget {
     final ThemeData darkTheme = ThemeData(
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColor.secondaryDarkColor,
-        brightness: Brightness.light,
+        primary: AppColor.primaryDarkColor,
+        secondary: AppColor.secondaryDarkColor,
+        brightness: Brightness.dark,
       ),
       scaffoldBackgroundColor: AppColor.primaryDarkColor,
     );
@@ -40,13 +46,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => HomepageController()),
         ChangeNotifierProvider(create: (context) => BarScreenController()),
         ChangeNotifierProvider(create: (context) => TabSwitchController()),
-        ChangeNotifierProvider(
-          create: (context) => ThemeToggleButtonController(),
-        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
+        theme: lightTheme,
+        themeMode: themeProvider.currentTheme,
+        darkTheme: darkTheme,
+
         home: LandingPageScreen(),
       ),
     );

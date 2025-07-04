@@ -33,7 +33,7 @@ class CustomBottomNavigationButton extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                color: Colors.grey[200],
+                color:Theme.of(context).colorScheme.secondary,
                 border: Border.all(color: Colors.grey[300]!),
               ),
               child: ClipRRect(

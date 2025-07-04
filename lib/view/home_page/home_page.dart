@@ -30,49 +30,43 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final _controller = Provider.of<HomepageController>(context, listen: false);
-    return Scaffold(
-      appBar: CustomAppBar(text: 'Your Expense',),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _controller.openNewExpense(context),
-        child: Icon(Icons.add),
-      ),
-      // bottomNavigationBar: Padding(
-      //   padding: const EdgeInsets.only(right: 12,left: 12,bottom: 50),
-      //   child: CustomBottomNavigationButton(),
-      // ),
-      body: Stack(
-        children: [
-          SafeArea(
-            child: Consumer<HomepageController>(
-              builder: (context, value, child) {
-                final loadExpenses = value.expenseData;
-                return loadExpenses.isEmpty
-                    ? Center(child: Text("No Such data"))
-                    : ListView.builder(
-                  itemCount: loadExpenses.length,
-                  itemBuilder: (context, index) {
-                    final expense = loadExpenses[index];
-                    String? formatDateValue = formatDate(expense.dateTime!);
-                    return MyListTile(
-                      leading: formatDateValue.toString(),
-                      title: expense.description!,
-                      trailing: expense.amount.toString(),
-                      onEditPressed: (context) =>
-                          _controller.updateNewExpense(context, expense, index),
-                      onDeletePressed: (context) =>
-                          _controller.deleteExpense(context, expense, index),
-                    );
-                  },
-                );
-              },
-              child: Column(children: [
-
-              ]),
+    return SafeArea(
+      child: Scaffold(
+        appBar: CustomAppBar(text: 'Your Expense'),
+        floatingActionButton: FloatingActionButton(onPressed: () => _controller.openNewExpense(context), child: Icon(Icons.add)),
+        // bottomNavigationBar: Padding(
+        //   padding: const EdgeInsets.only(right: 12,left: 12,bottom: 50),
+        //   child: CustomBottomNavigationButton(),
+        // ),
+        body: Stack(
+          children: [
+            SafeArea(
+              child: Consumer<HomepageController>(
+                builder: (context, value, child) {
+                  final loadExpenses = value.expenseData;
+                  return loadExpenses.isEmpty
+                      ? Center(child: Text("No Such data"))
+                      : ListView.builder(
+                          itemCount: loadExpenses.length,
+                          itemBuilder: (context, index) {
+                            final expense = loadExpenses[index];
+                            String? formatDateValue = formatDate(expense.dateTime!);
+                            return MyListTile(
+                              leading: formatDateValue.toString(),
+                              title: expense.description!,
+                              trailing: expense.amount.toString(),
+                              onEditPressed: (context) => _controller.updateNewExpense(context, expense, index),
+                              onDeletePressed: (context) => _controller.deleteExpense(context, expense, index),
+                            );
+                          },
+                        );
+                },
+                child: Column(children: []),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-
     );
   }
 }

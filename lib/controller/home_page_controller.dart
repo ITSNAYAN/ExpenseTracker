@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/core/helperFunction/convert_function.dart';
 import 'package:flutter_expense_tracker/expense_database/expense_adapter.dart';
 import 'package:flutter_expense_tracker/expense_database/hive_intializer.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 
 class HomepageController extends ChangeNotifier {
@@ -18,9 +19,6 @@ class HomepageController extends ChangeNotifier {
     final box = Hive.box<ExpenseAdapter>(HiveInitializer.boxName);
     _expenseData = box.values.toList();
     _expenseKeys = box.keys.cast<int>().toList();
-    // for (int i = 0; i < _expenseData.length; i++) {
-    //   print("KEY: ${_expenseKeys[i]} | DateTime: ${_expenseData[i].dateTime}");
-    // }
     notifyListeners();
   }
 
@@ -29,19 +27,36 @@ class HomepageController extends ChangeNotifier {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Color(0xfff7f6cf),
-        title: Text("New Expense"),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        title: Text("New Expense", style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary)),
         actions: [_cancelButton(context), _createNewDataBase(context)],
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
-              decoration: InputDecoration(hintText: "Description"),
+              decoration: InputDecoration(
+                hintText: "Description",
+                hintStyle: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary),
+              ),
               controller: descriptionText,
+              style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary),
             ),
-            TextField(
-              decoration: InputDecoration(hintText: "Amount"),
-              controller: amountText,
+            TextFormField(
+              key: GlobalKey(),
+              validator: (value){
+                if(value==null|| value.isEmpty){
+                  return "Please enter Amount";
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                 errorStyle:GoogleFonts.saira(fontSize: 9,color: Colors.red) ,
+                 hintText: "Amount",
+                hintStyle: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary),
+              ),
+
+              keyboardType: TextInputType.number,
+              controller: amountText,style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary),
             ),
           ],
         ),
@@ -53,6 +68,7 @@ class HomepageController extends ChangeNotifier {
   Widget _createNewDataBase(BuildContext context) {
     final box = Hive.box<ExpenseAdapter>(HiveInitializer.boxName);
     return MaterialButton(
+      splashColor: Colors.transparent,
       onPressed: () async {
         if (descriptionText.text.isNotEmpty && amountText.text.isNotEmpty) {
           // P O P  B O X
@@ -70,74 +86,57 @@ class HomepageController extends ChangeNotifier {
           notifyListeners();
         }
       },
-      child: Text("Save"),
+      child: Text("Save", style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary,)),
     );
   }
 
   // Update  New ExpenseBOX
-  void updateNewExpense(
-    BuildContext context,
-    ExpenseAdapter expenses,
-    int index,
-  ) {
+  void updateNewExpense(BuildContext context, ExpenseAdapter expenses, int index) {
     descriptionText.text = expenses.description!;
     amountText.text = expenses.amount.toString();
-    descriptionText.selection = TextSelection.fromPosition(
-      TextPosition(offset: descriptionText.text.length),
-    );
-    amountText.selection = TextSelection.fromPosition(
-      TextPosition(offset: amountText.text.length),
-    );
-    final key =
-        _expenseKeys[index]; // for syncing the internal key of hive in case if it take index of listUi
+    descriptionText.selection = TextSelection.fromPosition(TextPosition(offset: descriptionText.text.length));
+    amountText.selection = TextSelection.fromPosition(TextPosition(offset: amountText.text.length));
+    final key = _expenseKeys[index]; // for syncing the internal key of hive in case if it take index of listUi
     // List index ≠ Hive key — always use keyAt(index) for update/delete!"
+    final _formKey= GlobalKey<FormState>();
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Edit Expense"),
-        actions: [
-          _editExpenseButton(context, expenses, key),
-          _cancelButton(context),
-        ],
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-
-          children: [
-            TextField(
-              decoration: InputDecoration(labelText: descriptionText.text),
-              controller: descriptionText,
-            ),
-            TextField(
-              decoration: InputDecoration(hintText: amountText.text),
-              controller: amountText,
-            ),
-          ],
+        backgroundColor:Theme.of(context).colorScheme.secondary,
+        title: Text("Edit Expense", style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary)),
+        actions: [_editExpenseButton(context, expenses, key), _cancelButton(context)],
+        content: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                decoration: InputDecoration(labelText: descriptionText.text),
+                controller: descriptionText,
+              ),
+              TextFormField(
+                decoration: InputDecoration(hintText: amountText.text),
+                controller: amountText,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _editExpenseButton(
-    BuildContext context,
-    ExpenseAdapter expense,
-    int index,
-  ) {
+  Widget _editExpenseButton(BuildContext context, ExpenseAdapter expense, int index) {
     final box = Hive.box<ExpenseAdapter>(HiveInitializer.boxName);
     return MaterialButton(
       onPressed: () async {
         if (descriptionText.text.isNotEmpty || amountText.text.isNotEmpty) {
           Navigator.pop(context);
           ExpenseAdapter updatedExpense = ExpenseAdapter(
-            description: descriptionText.text.isNotEmpty
-                ? descriptionText.text
-                : expense.description,
-            amount: amountText.text.isNotEmpty
-                ? convertStringToDouble(amountText.text)
-                : expense.amount,
+            description: descriptionText.text.isNotEmpty ? descriptionText.text : expense.description,
+            amount: amountText.text.isNotEmpty ? convertStringToDouble(amountText.text) : expense.amount,
             dateTime: _dateTime,
           );
-          final key =
-              index; // Safely get key from index before updating to avoid key mismatch
+          final key = index; // Safely get key from index before updating to avoid key mismatch
           await box.put(key, updatedExpense);
           descriptionText.clear();
           amountText.clear();
@@ -145,7 +144,7 @@ class HomepageController extends ChangeNotifier {
           notifyListeners();
         }
       },
-      child: Text("Update"),
+      child: Text("Update", style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary)),
     );
   }
 
@@ -155,21 +154,15 @@ class HomepageController extends ChangeNotifier {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Delete Expense"),
-        actions: [
-          _deleteExpenseButton(context, expenses, key),
-          _cancelButton(context),
-        ],
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        title: Text("Delete Expense", style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary)),
+        actions: [_deleteExpenseButton(context, expenses, key), _cancelButton(context)],
       ),
     );
   }
 
   //Delete Button
-  Widget _deleteExpenseButton(
-    BuildContext context,
-    ExpenseAdapter expenses,
-    int index,
-  ) {
+  Widget _deleteExpenseButton(BuildContext context, ExpenseAdapter expenses, int index) {
     final box = Hive.box<ExpenseAdapter>(HiveInitializer.boxName);
     return MaterialButton(
       onPressed: () async {
@@ -179,7 +172,7 @@ class HomepageController extends ChangeNotifier {
         fetchData();
         notifyListeners();
       },
-      child: Text("Delete"),
+      child: Text("Delete", style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary)),
     );
   }
 
@@ -189,7 +182,7 @@ class HomepageController extends ChangeNotifier {
       onPressed: () {
         Navigator.pop(context);
       },
-      child: Text("Cancel"),
+      child: Text("Cancel", style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary)),
     );
   }
 }
