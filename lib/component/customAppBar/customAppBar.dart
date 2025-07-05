@@ -27,7 +27,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
   Widget themeToggleButton(BuildContext context) {
     ThemeToggleButtonController controller = Provider.of<ThemeToggleButtonController>(context);
     return IconButton(
-
       onPressed: () {
         controller.onSelectTheme();
       },

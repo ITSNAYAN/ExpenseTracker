@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/component/customBottomNavigationButton/tab_switch_controller.dart';
+import 'package:flutter_expense_tracker/expense_database/expense_adapter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -10,7 +11,6 @@ class CustomBottomNavigationButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tabSwitchController = Provider.of<TabSwitchController>(context);
-
     return Container(
       height: 50,
       width: 180,

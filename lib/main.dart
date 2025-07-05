@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveInitializer.initHive();
-  runApp(ChangeNotifierProvider(create: (context) => ThemeToggleButtonController(), child: MyApp()));
+  runApp(ChangeNotifierProvider(create: (context) => ThemeToggleButtonController(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,25 +22,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeToggleButtonController>(context);
-    print("~~~~~~");
-    final ThemeData lightTheme = ThemeData(
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColor.secondaryLightColor,
-        primary: AppColor.primaryLightColor,
-        secondary: AppColor.secondaryLightColor,
-        brightness: Brightness.light,
-      ),
-      scaffoldBackgroundColor: AppColor.primaryLightColor,
-    );
-    final ThemeData darkTheme = ThemeData(
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColor.secondaryDarkColor,
-        primary: AppColor.primaryDarkColor,
-        secondary: AppColor.secondaryDarkColor,
-        brightness: Brightness.dark,
-      ),
-      scaffoldBackgroundColor: AppColor.primaryDarkColor,
-    );
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => HomepageController()),
@@ -50,12 +31,32 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
-        theme: lightTheme,
+        theme: MyTheme.lightTheme,
         themeMode: themeProvider.currentTheme,
-        darkTheme: darkTheme,
-
+        darkTheme: MyTheme.darkTheme,
         home: LandingPageScreen(),
       ),
     );
   }
+}
+
+class MyTheme{
+  static final ThemeData lightTheme = ThemeData(
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: AppColor.secondaryLightColor,
+      primary: AppColor.primaryLightColor,
+      secondary: AppColor.secondaryLightColor,
+      brightness: Brightness.light,
+    ),
+    scaffoldBackgroundColor: AppColor.primaryLightColor,
+  );
+  static final ThemeData darkTheme = ThemeData(
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: AppColor.secondaryDarkColor,
+      primary: AppColor.primaryDarkColor,
+      secondary: AppColor.secondaryDarkColor,
+      brightness: Brightness.dark,
+    ),
+    scaffoldBackgroundColor: AppColor.primaryDarkColor,
+  );
 }

@@ -13,11 +13,8 @@ class ExpenseAdapter extends HiveObject {
   @HiveField(2)
   DateTime? dateTime;
 
-  ExpenseAdapter({
-    required this.description,
-    required this.amount,
-    required this.dateTime,
-  });
+
+  ExpenseAdapter({required this.description, required this.amount, required this.dateTime});
 }
 
 // | You See This           | It Means                               |

@@ -24,53 +24,64 @@ class HomepageController extends ChangeNotifier {
 
   //open new ExpenseBox
   void openNewExpense(BuildContext context) {
+    final _formKey= GlobalKey<FormState>();
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.secondary,
         title: Text("New Expense", style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary)),
-        actions: [_cancelButton(context), _createNewDataBase(context)],
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                hintText: "Description",
-                hintStyle: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary),
+        actions: [_cancelButton(context), Builder(
+          builder: (context)=> _createNewDataBase(context,_formKey))],
+        content: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                validator: (value){
+                  if(value==null|| value.isEmpty){
+                    return "Please enter description";
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  hintText: "Description",
+                  hintStyle: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary),
+                ),
+                controller: descriptionText,
+                style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary),
               ),
-              controller: descriptionText,
-              style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary),
-            ),
-            TextFormField(
-              key: GlobalKey(),
-              validator: (value){
-                if(value==null|| value.isEmpty){
-                  return "Please enter Amount";
-                }
-                return null;
-              },
-              decoration: InputDecoration(
-                 errorStyle:GoogleFonts.saira(fontSize: 9,color: Colors.red) ,
-                 hintText: "Amount",
-                hintStyle: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary),
-              ),
+              TextFormField(
+                // key: GlobalKey(),
+                validator: (value){
+                  if(value==null|| value.isEmpty){
+                    return "Please enter Amount";
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                   errorStyle:GoogleFonts.saira(fontSize: 9,color: Colors.red) ,
+                   hintText: "Amount",
+                  hintStyle: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary),
+                ),
 
-              keyboardType: TextInputType.number,
-              controller: amountText,style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary),
-            ),
-          ],
+                keyboardType: TextInputType.number,
+                controller: amountText,style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   // Save Button
-  Widget _createNewDataBase(BuildContext context) {
+  Widget _createNewDataBase(BuildContext context, GlobalKey<FormState> formKey) {
     final box = Hive.box<ExpenseAdapter>(HiveInitializer.boxName);
     return MaterialButton(
       splashColor: Colors.transparent,
       onPressed: () async {
-        if (descriptionText.text.isNotEmpty && amountText.text.isNotEmpty) {
+        if (formKey.currentState!.validate()) {
           // P O P  B O X
           Navigator.pop(context);
           //  C R E A T E   A   N E W  E X P E N S E
@@ -92,34 +103,33 @@ class HomepageController extends ChangeNotifier {
 
   // Update  New ExpenseBOX
   void updateNewExpense(BuildContext context, ExpenseAdapter expenses, int index) {
+
     descriptionText.text = expenses.description!;
     amountText.text = expenses.amount.toString();
     descriptionText.selection = TextSelection.fromPosition(TextPosition(offset: descriptionText.text.length));
     amountText.selection = TextSelection.fromPosition(TextPosition(offset: amountText.text.length));
     final key = _expenseKeys[index]; // for syncing the internal key of hive in case if it take index of listUi
     // List index ≠ Hive key — always use keyAt(index) for update/delete!"
-    final _formKey= GlobalKey<FormState>();
+
     showDialog(
+
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor:Theme.of(context).colorScheme.secondary,
         title: Text("Edit Expense", style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary)),
         actions: [_editExpenseButton(context, expenses, key), _cancelButton(context)],
-        content: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                decoration: InputDecoration(labelText: descriptionText.text),
-                controller: descriptionText,
-              ),
-              TextFormField(
-                decoration: InputDecoration(hintText: amountText.text),
-                controller: amountText,
-              ),
-            ],
-          ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              decoration: InputDecoration(labelText: descriptionText.text),
+              controller: descriptionText,
+            ),
+            TextFormField(
+              decoration: InputDecoration(hintText: amountText.text),
+              controller: amountText,
+            ),
+          ],
         ),
       ),
     );
@@ -186,3 +196,5 @@ class HomepageController extends ChangeNotifier {
     );
   }
 }
+
+//**IMPORTANT POINT - Form should be the single parent of all form-related widgets. **//

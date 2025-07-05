@@ -9,5 +9,6 @@ class HiveInitializer {
     await Hive.initFlutter();
     Hive.registerAdapter(ExpenseAdapterAdapter());
     await Hive.openBox<ExpenseAdapter>(boxName);
+    await Hive.openBox("Setting");
   }
 }
