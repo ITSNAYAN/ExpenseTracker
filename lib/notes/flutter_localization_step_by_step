@@ -1,0 +1,129 @@
+✅ STEP-BY-STEP GUIDE: Flutter Localization (Hindi + English)
+🔹 Step 1: Add required packages
+In your pubspec.yaml:
+
+yaml
+Copy
+Edit
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.18.0
+Then run:
+
+bash
+Copy
+Edit
+flutter pub get
+🔹 Step 2: Create your ARB translation files
+In this folder:
+
+bash
+Copy
+Edit
+lib/core/appLocalization/
+Create:
+
+app_en.arb
+json
+Copy
+Edit
+{
+  "@@locale": "en",
+  "homeScreenTitle": "Your Expense"
+}
+app_hi.arb
+json
+Copy
+Edit
+{
+  "@@locale": "hi",
+  "homeScreenTitle": "आपका खर्च"
+}
+You can add more keys similarly.
+
+🔹 Step 3: Create a l10n.yaml file in root (next to pubspec.yaml)
+yaml
+Copy
+Edit
+arb-dir: lib/core/appLocalization
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+preferred-supported-locales:
+  - en
+  - hi
+✅ This file tells Flutter how to generate the localization code.
+
+🔹 Step 4: Update pubspec.yaml to enable code generation
+Under flutter:, add:
+
+yaml
+Copy
+Edit
+flutter:
+  uses-material-design: true
+  generate: true
+✅ Do not add localizations: inside flutter: in Flutter 3.8.1.
+
+🔹 Step 5: Generate localization code
+In terminal, run:
+
+bash
+Copy
+Edit
+flutter gen-l10n
+➡️ This generates app_localizations.dart inside:
+
+bash
+Copy
+Edit
+.dart_tool/flutter_gen/gen_l10n/
+🔹 Step 6: Import localization in your main.dart
+dart
+Copy
+Edit
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+🔹 Step 7: Add localization setup in MaterialApp
+In your main.dart or MyApp widget:
+
+dart
+Copy
+Edit
+MaterialApp(
+  locale: Locale('en'), // or dynamically use from provider
+  supportedLocales: const [
+    Locale('en'),
+    Locale('hi'),
+  ],
+  localizationsDelegates: const [
+    AppLocalizations.delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  home: MyHomePage(),
+);
+🔹 Step 8: Use translated strings
+In your widgets:
+
+dart
+Copy
+Edit
+Text(AppLocalizations.of(context)!.homeScreenTitle)
+🔹 Step 9: Add dynamic language switching (optional)
+You already created LanguageChangeController. Just make sure:
+
+locale: in MaterialApp reads from Provider
+
+Your button toggles the bool isEnglish and calls notifyListeners()
+
+✅ Optional Commands
+Command	Purpose
+flutter pub get	Install packages
+flutter pub run build_runner clean	Clean generated files
+flutter gen-l10n	Generate localization files
+flutter clean && flutter pub get	Full clean install

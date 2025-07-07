@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_expense_tracker/component/indiviual_bar.dart';
-import 'package:flutter_expense_tracker/core/helperFunction/convert_function.dart';
-import 'package:flutter_expense_tracker/expense_database/expense_adapter.dart';
-import 'package:flutter_expense_tracker/expense_database/hive_intializer.dart';
+import 'package:flutter_expense_tracker/core/expense_database/expense_adapter.dart';
+import 'package:flutter_expense_tracker/core/expense_database/hive_intializer.dart';
 import 'package:hive_flutter/adapters.dart';
 
 class BarScreenController extends ChangeNotifier {
@@ -10,6 +8,7 @@ class BarScreenController extends ChangeNotifier {
   List<ExpenseAdapter> _allExpenses = [];
 
   Future<Map<int, double>>? _monthlyTotalsFuture;
+
   Future<Map<int, double>> get monthlyTotalsFuture => _monthlyTotalsFuture ?? Future.value({});
 
   Future<void> initController() async {

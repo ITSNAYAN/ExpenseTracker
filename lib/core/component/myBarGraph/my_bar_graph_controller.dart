@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_expense_tracker/expense_database/expense_adapter.dart';
+import 'package:flutter_expense_tracker/core/expense_database/expense_adapter.dart';
+
 
 class BarScreenController extends ChangeNotifier {
   final ScrollController scrollController = ScrollController();

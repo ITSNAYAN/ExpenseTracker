@@ -1,4 +1,4 @@
-import 'package:flutter_expense_tracker/expense_database/expense_adapter.dart';
+import 'package:flutter_expense_tracker/core/expense_database/expense_adapter.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 

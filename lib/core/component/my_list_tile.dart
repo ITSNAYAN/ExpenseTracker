@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../core/helperFunction/convert_function.dart';
-
 class MyListTile extends StatelessWidget {
   final String trailing;
   final String leading;
@@ -50,7 +48,7 @@ class MyListTile extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.only(left: 12.0,right: 12,top: 8.0,bottom: 8.0),
+        padding: const EdgeInsets.only(left: 12.0, right: 12, top: 8.0, bottom: 8.0),
         child: Container(
           height: MediaQuery.of(context).size.height * 0.12,
           width: double.infinity,
@@ -63,9 +61,20 @@ class MyListTile extends StatelessWidget {
             color: color.colorScheme.secondary,
           ),
           child: ListTile(
-            leading: Text(leading,style: GoogleFonts.saira(color:color.colorScheme.primary ),),
-            title: Center(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.saira(color:color.colorScheme.primary),)),
-            trailing: Text(trailing,style: GoogleFonts.saira(color:color.colorScheme.primary ), textAlign: TextAlign.end),
+            leading: Text(leading, style: GoogleFonts.saira(color: color.colorScheme.primary)),
+            title: Center(
+              child: Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.saira(color: color.colorScheme.primary),
+              ),
+            ),
+            trailing: Text(
+              trailing,
+              style: GoogleFonts.saira(color: color.colorScheme.primary),
+              textAlign: TextAlign.end,
+            ),
           ),
         ),
       ),
@@ -73,8 +82,8 @@ class MyListTile extends StatelessWidget {
   }
 }
 
-class Con{
-  void callApi(){
+class Con {
+  void callApi() {
     print("----- Api Called");
   }
 }

@@ -1,11 +1,9 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker/component/customAppBar/customAppBar.dart';
-
-import 'package:flutter_expense_tracker/component/myBarGraph/my_bar_graph.dart';
 import 'package:flutter_expense_tracker/controller/bar_screen_controller.dart';
-
+import 'package:flutter_expense_tracker/core/appLocalization/app_localizations.dart';
+import 'package:flutter_expense_tracker/core/component/customAppBar/customAppBar.dart';
+import 'package:flutter_expense_tracker/core/component/myBarGraph/my_bar_graph.dart';
 import 'package:provider/provider.dart';
 
 class BarScreen extends StatefulWidget {
@@ -38,28 +36,25 @@ class _BarScreenState extends State<BarScreen> {
         // int monthCount = calculateMonthCount(startYear, startMonth, currentYear, currentMonth);
 
         return Scaffold(
-           appBar: CustomAppBar(text: 'Spend Analysis'),
+          appBar: CustomAppBar(text: AppLocalizations.of(context)!.analysisScreenTitle),
           body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 200.0),
-              child: Column(
-                children: [
-                  FutureBuilder(
-                    future: value.monthlyTotalsFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return SingleChildScrollView();
-                      }
-                      if (snapshot.hasError) {
-                        return Text("Error:${snapshot.error}");
-                      }
-                      final data = snapshot.data ?? {};
-                      final monthlySummary = value.generate12MonthSummary(data, startYear);
-                      return MyBarGraph(monthlySummary: monthlySummary, startMonth: 1);
-                    },
-                  ),
-                ],
-              ),
+            child: Column(
+              children: [
+                FutureBuilder(
+                  future: value.monthlyTotalsFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return SingleChildScrollView();
+                    }
+                    if (snapshot.hasError) {
+                      return Text("Error:${snapshot.error}");
+                    }
+                    final data = snapshot.data ?? {};
+                    final monthlySummary = value.generate12MonthSummary(data, startYear);
+                    return MyBarGraph(monthlySummary: monthlySummary, startMonth: 1);
+                  },
+                ),
+              ],
             ),
           ),
         );

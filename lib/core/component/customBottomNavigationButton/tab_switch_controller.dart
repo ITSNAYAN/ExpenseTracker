@@ -5,7 +5,6 @@ class TabSwitchController extends ChangeNotifier{
    bool get selectExpenseValue => _selectExpenseValue;
 
   void onTapExpense(){
-
     _selectExpenseValue = true ;
     notifyListeners();
   }

@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker/component/customAppBar/theme_toggle_button_controller.dart';
-import 'package:flutter_expense_tracker/component/customBottomNavigationButton/tab_switch_controller.dart';
 import 'package:flutter_expense_tracker/controller/bar_screen_controller.dart';
 import 'package:flutter_expense_tracker/controller/home_page_controller.dart';
 import 'package:flutter_expense_tracker/core/AppColor/app_Color.dart';
-import 'package:flutter_expense_tracker/expense_database/hive_intializer.dart';
-import 'package:flutter_expense_tracker/view/bar_graph_screen/bar_screen.dart';
-import 'package:flutter_expense_tracker/view/home_page/home_page.dart';
+import 'package:flutter_expense_tracker/core/component/customAppBar/language_change_button_controller.dart';
+import 'package:flutter_expense_tracker/core/component/customAppBar/theme_toggle_button_controller.dart';
+import 'package:flutter_expense_tracker/core/component/customBottomNavigationButton/tab_switch_controller.dart';
+import 'package:flutter_expense_tracker/core/expense_database/hive_intializer.dart';
 import 'package:flutter_expense_tracker/view/landing_page/landing_page_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'core/appLocalization/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveInitializer.initHive();
-  runApp(ChangeNotifierProvider(create: (context) => ThemeToggleButtonController(), child: const MyApp()));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeToggleButtonController()),
+        ChangeNotifierProvider(create: (context) => LanguageChangeController()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -21,15 +30,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final languageChangeController = Provider.of<LanguageChangeController>(context);
     final themeProvider = Provider.of<ThemeToggleButtonController>(context);
+
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => HomepageController()),
-        ChangeNotifierProvider(create: (context) => BarScreenController()),
-        ChangeNotifierProvider(create: (context) => TabSwitchController()),
+        ChangeNotifierProvider(create: (_) => HomepageController()),
+        ChangeNotifierProvider(create: (_) => BarScreenController()),
+        ChangeNotifierProvider(create: (_) => TabSwitchController()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
+        locale: languageChangeController.isEnglish ? Locale('en') : Locale('hi'),
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [Locale('en', ''), Locale('hi', '')],
         debugShowCheckedModeBanner: false,
         theme: MyTheme.lightTheme,
         themeMode: themeProvider.currentTheme,
@@ -40,7 +59,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyTheme{
+class MyTheme {
   static final ThemeData lightTheme = ThemeData(
     colorScheme: ColorScheme.fromSeed(
       seedColor: AppColor.secondaryLightColor,
