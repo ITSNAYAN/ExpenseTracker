@@ -21,7 +21,7 @@ class MyListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData color = Theme.of(context);
-    Con().callApi();
+    // Con().callApi();
     return Slidable(
       endActionPane: ActionPane(
         motion: const StretchMotion(),
@@ -61,19 +61,44 @@ class MyListTile extends StatelessWidget {
             color: color.colorScheme.secondary,
           ),
           child: ListTile(
-            leading: Text(leading, style: GoogleFonts.saira(color: color.colorScheme.primary)),
+            leading: Container(
+              height: 25,
+              width: 75,
+              decoration: BoxDecoration(
+                color: color.colorScheme.primary,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(
+                  color: Colors.grey.shade300, // soft minimal color
+                  width: 0.5, // minimal border width
+                ),
+              ),
+                child: Center(child: Text(leading, style: GoogleFonts.saira(color: color.colorScheme.secondary)))),
             title: Center(
               child: Text(
                 title,
-                maxLines: 1,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.saira(color: color.colorScheme.primary),
+                style: GoogleFonts.saira(color: color.colorScheme.primary,fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ),
-            trailing: Text(
-              trailing,
-              style: GoogleFonts.saira(color: color.colorScheme.primary),
-              textAlign: TextAlign.end,
+            trailing: Container(
+              height: 25,
+              width: 75,
+              decoration: BoxDecoration(
+                color: color.colorScheme.primary,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(
+                  color: Colors.grey.shade300, // soft minimal color
+                  width: 0.5, // minimal border width
+                ),
+              ),
+              child: Center (
+                child: Text(
+                  trailing,
+                  style: GoogleFonts.saira(color: color.colorScheme.secondary,fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.end,
+                ),
+              ),
             ),
           ),
         ),
@@ -82,8 +107,9 @@ class MyListTile extends StatelessWidget {
   }
 }
 
-class Con {
-  void callApi() {
-    print("----- Api Called");
-  }
-}
+// class Con {
+//   void callApi() {
+//     print("----- Api Called");
+//     print("----- Api Called");
+//   }
+// }

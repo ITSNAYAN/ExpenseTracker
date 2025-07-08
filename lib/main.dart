@@ -4,6 +4,7 @@ import 'package:flutter_expense_tracker/controller/home_page_controller.dart';
 import 'package:flutter_expense_tracker/core/AppColor/app_Color.dart';
 import 'package:flutter_expense_tracker/core/component/customAppBar/language_change_button_controller.dart';
 import 'package:flutter_expense_tracker/core/component/customAppBar/theme_toggle_button_controller.dart';
+import 'package:flutter_expense_tracker/core/component/customBottomNavigationButton/scrollController.dart';
 import 'package:flutter_expense_tracker/core/component/customBottomNavigationButton/tab_switch_controller.dart';
 import 'package:flutter_expense_tracker/core/expense_database/hive_intializer.dart';
 import 'package:flutter_expense_tracker/view/landing_page/landing_page_screen.dart';
@@ -19,6 +20,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => ThemeToggleButtonController()),
         ChangeNotifierProvider(create: (context) => LanguageChangeController()),
+        ChangeNotifierProvider(create: (context) => ScrollAwareController()),
       ],
       child: const MyApp(),
     ),

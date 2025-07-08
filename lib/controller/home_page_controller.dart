@@ -41,6 +41,8 @@ class HomepageController extends ChangeNotifier {
                 validator: (value){
                   if(value==null|| value.isEmpty){
                     return "Please enter description";
+                  }else if (value=="0"){
+                    return "please enter some amount";
                   }
                   return null;
                 },

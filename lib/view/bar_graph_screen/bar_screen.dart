@@ -7,7 +7,8 @@ import 'package:flutter_expense_tracker/core/component/myBarGraph/my_bar_graph.d
 import 'package:provider/provider.dart';
 
 class BarScreen extends StatefulWidget {
-  const BarScreen({super.key});
+  final ScrollController scrollController ;
+  const BarScreen({super.key,required this.scrollController });
 
   @override
   State<BarScreen> createState() => _BarScreenState();
