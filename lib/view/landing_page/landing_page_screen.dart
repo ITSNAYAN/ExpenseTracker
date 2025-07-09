@@ -17,17 +17,12 @@ class LandingPageScreen extends StatefulWidget {
 
 class _LandingPageScreenState extends State<LandingPageScreen> {
   final ScrollController _scrollController = ScrollController();
-  bool _isVisible = true;
-
-  double _previousOffset = 0;
 
   @override
   void initState() {
     _scrollController.addListener(() {
       final offset = _scrollController.offset;
-      print(offset);
-      context.read<ScrollAwareController>().updateVisibility(offset);
-     // Provider.of<ScrollAwareController>(context, listen: false).updateVisibility(offset);
+      Provider.of<ScrollAwareController>(context, listen: false).updateVisibility(offset);
     });
     super.initState();
   }
@@ -43,23 +38,16 @@ class _LandingPageScreenState extends State<LandingPageScreen> {
               alignment: Alignment.bottomCenter,
               children: [
                 tabController.selectExpenseValue ? HomePage(scrollController: _scrollController) : BarScreen(scrollController: _scrollController),
-                // Consumer<ScrollAwareController>(
-                //   builder: (context, value, child) {
-                //     print("~~~~~~~~~~~~~"+value.isVisible.toString());
-                //     return AnimatedSlide(
-                //       offset: value.isVisible ? Offset(0, 0) : Offset(0, 1.5),
-                //       duration: Duration(milliseconds: 250),
-                //       child: child,
-                //     );
-                //   },
-                //   child: Padding(padding: const EdgeInsets.only(right: 12, left: 12, bottom: 50), child: const CustomBottomNavigationButton()),
-                // ),
-               AnimatedSlide(
-                      offset: context.watch<ScrollAwareController>().isVisible ? Offset(0, 0) : Offset(0, 1.5),
+                Consumer<ScrollAwareController>(
+                  builder: (context, value, child) {
+                    return AnimatedSlide(
+                      offset: value.isVisible ? Offset(0, 0) : Offset(0, 1.5),
                       duration: Duration(milliseconds: 250),
-                      child: Padding(padding: const EdgeInsets.only(right: 12, left: 12, bottom: 50), child: const CustomBottomNavigationButton()),
-                    ),
-
+                      child: child,
+                    );
+                  },
+                  child: Padding(padding: const EdgeInsets.only(right: 12, left: 12, bottom: 50), child: const CustomBottomNavigationButton()),
+                ),
               ],
             ),
           );

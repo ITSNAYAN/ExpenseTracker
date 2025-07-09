@@ -7,8 +7,9 @@ import 'package:flutter_expense_tracker/core/component/myBarGraph/my_bar_graph.d
 import 'package:provider/provider.dart';
 
 class BarScreen extends StatefulWidget {
-  final ScrollController scrollController ;
-  const BarScreen({super.key,required this.scrollController });
+  final ScrollController scrollController;
+
+  const BarScreen({super.key, required this.scrollController});
 
   @override
   State<BarScreen> createState() => _BarScreenState();
@@ -29,12 +30,7 @@ class _BarScreenState extends State<BarScreen> {
     return Consumer<BarScreenController>(
       builder: (context, value, child) {
         // get all Dates
-        int startMonth = value.getStartMonth();
         int startYear = value.getStartYear();
-        int currentMonth = DateTime.now().month;
-        int currentYear = DateTime.now().year;
-        // calculate the number of month since the first month and current month
-        // int monthCount = calculateMonthCount(startYear, startMonth, currentYear, currentMonth);
 
         return Scaffold(
           appBar: CustomAppBar(text: AppLocalizations.of(context)!.analysisScreenTitle),

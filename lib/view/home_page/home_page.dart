@@ -34,24 +34,22 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: CustomAppBar(text: AppLocalizations.of(context)!.homeScreenTitle),
         floatingActionButton: FloatingActionButton(onPressed: () => _controller.openNewExpense(context), child: Icon(Icons.add)),
-        // bottomNavigationBar: Padding(
-        //   padding: const EdgeInsets.only(right: 12,left: 12,bottom: 50),
-        //   child: CustomBottomNavigationButton(),
-        // ),
         body: Stack(
           children: [
             Consumer<HomepageController>(
               builder: (context, value, child) {
+                // value.getExpenseList();
                 final loadExpenses = value.expenseData;
                 return loadExpenses.isEmpty
-                    ? Center(child: Text("No Such data"))
+                    ? Center(child: const Text("No Such data"))
                     : ListView.builder(
-                  controller: widget.scrollController,
+                       controller: widget.scrollController,
                         itemCount: loadExpenses.length,
                         itemBuilder: (context, index) {
                           final expense = loadExpenses[index];
                           String? formatDateValue = formatDate(expense.dateTime!);
                           return MyListTile(
+                            key:ValueKey("${expense.dateTime}_${expense.description}"),
                             leading: formatDateValue.toString(),
                             title: expense.description!,
                             trailing: expense.amount.toString(),
@@ -61,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                         },
                       );
               },
-              child: Column(children: []),
+
             ),
           ],
         ),

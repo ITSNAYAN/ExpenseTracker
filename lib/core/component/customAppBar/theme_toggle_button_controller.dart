@@ -15,7 +15,7 @@ class ThemeToggleButtonController extends ChangeNotifier {
 
   Future<void> _loadAppTheme() async {
     final box = await Hive.openBox("Setting");
-    _isLightThemeSelect = box.get(isLightThemeSelect, defaultValue: true);
+    _isLightThemeSelect = box.get("isLightThemeSelect", defaultValue: true);
     notifyListeners();
   }
 

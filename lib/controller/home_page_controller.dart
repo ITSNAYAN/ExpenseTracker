@@ -8,11 +8,11 @@ import 'package:hive/hive.dart';
 class HomepageController extends ChangeNotifier {
   TextEditingController descriptionText = TextEditingController();
   TextEditingController amountText = TextEditingController();
-  DateTime _dateTime = DateTime.now();
+  final DateTime _dateTime = DateTime.now();
   List<ExpenseAdapter> _expenseData = [];
   List<int> _expenseKeys = [];
 
-  List<ExpenseAdapter> get expenseData => _expenseData;
+  List<ExpenseAdapter> get expenseData => _expenseData.reversed.toList();
 
   //Read Database
   void fetchData() {
@@ -24,24 +24,26 @@ class HomepageController extends ChangeNotifier {
 
   //open new ExpenseBox
   void openNewExpense(BuildContext context) {
-    final _formKey= GlobalKey<FormState>();
+    final _formKey = GlobalKey<FormState>();
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.secondary,
         title: Text("New Expense", style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary)),
-        actions: [_cancelButton(context), Builder(
-          builder: (context)=> _createNewDataBase(context,_formKey))],
+        actions: [
+          _cancelButton(context),
+          Builder(builder: (context) => _createNewDataBase(context, _formKey)),
+        ],
         content: Form(
           key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextFormField(
-                validator: (value){
-                  if(value==null|| value.isEmpty){
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
                     return "Please enter description";
-                  }else if (value=="0"){
+                  } else if (value == "0") {
                     return "please enter some amount";
                   }
                   return null;
@@ -55,20 +57,21 @@ class HomepageController extends ChangeNotifier {
               ),
               TextFormField(
                 // key: GlobalKey(),
-                validator: (value){
-                  if(value==null|| value.isEmpty){
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
                     return "Please enter Amount";
                   }
                   return null;
                 },
                 decoration: InputDecoration(
-                   errorStyle:GoogleFonts.saira(fontSize: 9,color: Colors.red) ,
-                   hintText: "Amount",
+                  errorStyle: GoogleFonts.saira(fontSize: 9, color: Colors.red),
+                  hintText: "Amount",
                   hintStyle: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary),
                 ),
 
                 keyboardType: TextInputType.number,
-                controller: amountText,style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary),
+                controller: amountText,
+                style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary),
               ),
             ],
           ),
@@ -99,13 +102,12 @@ class HomepageController extends ChangeNotifier {
           notifyListeners();
         }
       },
-      child: Text("Save", style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary,)),
+      child: Text("Save", style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary)),
     );
   }
 
   // Update  New ExpenseBOX
   void updateNewExpense(BuildContext context, ExpenseAdapter expenses, int index) {
-
     descriptionText.text = expenses.description!;
     amountText.text = expenses.amount.toString();
     descriptionText.selection = TextSelection.fromPosition(TextPosition(offset: descriptionText.text.length));
@@ -114,10 +116,9 @@ class HomepageController extends ChangeNotifier {
     // List index ≠ Hive key — always use keyAt(index) for update/delete!"
 
     showDialog(
-
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor:Theme.of(context).colorScheme.secondary,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         title: Text("Edit Expense", style: GoogleFonts.saira(color: Theme.of(context).colorScheme.primary)),
         actions: [_editExpenseButton(context, expenses, key), _cancelButton(context)],
         content: Column(
