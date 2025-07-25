@@ -22,7 +22,14 @@ class _LandingPageScreenState extends State<LandingPageScreen> {
   void initState() {
     _scrollController.addListener(() {
       final offset = _scrollController.offset;
-      Provider.of<ScrollAwareController>(context, listen: false).updateVisibility(offset);
+      Provider.of<ScrollAwareController>(
+        context,
+        listen: false,
+      ).updateVisibility(offset);
+      Provider.of<ScrollAwareController>(
+        context,
+        listen: false,
+      ).updateVisibility(offset);
     });
     super.initState();
   }
@@ -37,7 +44,9 @@ class _LandingPageScreenState extends State<LandingPageScreen> {
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
-                tabController.selectExpenseValue ? HomePage(scrollController: _scrollController) : BarScreen(scrollController: _scrollController),
+                tabController.selectExpenseValue
+                    ? HomePage(scrollController: _scrollController)
+                    : BarScreen(scrollController: _scrollController),
                 Consumer<ScrollAwareController>(
                   builder: (context, value, child) {
                     return AnimatedSlide(
@@ -46,7 +55,14 @@ class _LandingPageScreenState extends State<LandingPageScreen> {
                       child: child,
                     );
                   },
-                  child: Padding(padding: const EdgeInsets.only(right: 12, left: 12, bottom: 50), child: const CustomBottomNavigationButton()),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      right: 12,
+                      left: 12,
+                      bottom: 50,
+                    ),
+                    child: const CustomBottomNavigationButton(),
+                  ),
                 ),
               ],
             ),

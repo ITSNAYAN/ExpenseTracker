@@ -4,7 +4,6 @@ import 'package:hive_flutter/adapters.dart';
 
 class HiveInitializer {
   static const String boxName = 'expenseBox';
-
   static Future<void> initHive() async {
     await Hive.initFlutter();
     Hive.registerAdapter(ExpenseAdapterAdapter());

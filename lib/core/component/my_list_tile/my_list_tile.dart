@@ -62,7 +62,6 @@ class MyListTile extends StatelessWidget {
             color: color.colorScheme.secondary,
           ),
           child: ListTile(
-
             leading: Container(
               height: 25,
               width: 75,
