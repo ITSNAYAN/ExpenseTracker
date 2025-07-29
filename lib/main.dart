@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/controller/bar_screen_controller.dart';
-import 'package:flutter_expense_tracker/controller/bar_screen_controller.dart';
 import 'package:flutter_expense_tracker/controller/home_page_controller.dart';
 import 'package:flutter_expense_tracker/core/AppColor/app_Color.dart';
 import 'package:flutter_expense_tracker/core/component/customAppBar/language_change_button_controller.dart';
@@ -10,13 +9,14 @@ import 'package:flutter_expense_tracker/core/component/customBottomNavigationBut
 import 'package:flutter_expense_tracker/core/expense_database/hive_intializer.dart';
 import 'package:flutter_expense_tracker/service/notificationService/notification_service.dart';
 import 'package:flutter_expense_tracker/view/landing_page/landing_page_screen.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+
 import 'core/appLocalization/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  NotificationService().initNotification();
+  await NotificationService().initNotification();
   await HiveInitializer.initHive();
   runApp(
     MultiProvider(

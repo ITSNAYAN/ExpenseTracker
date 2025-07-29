@@ -87,12 +87,29 @@ class HomepageController extends ChangeNotifier {
     return MaterialButton(
       splashColor: Colors.transparent,
       onPressed: () async {
-        print("notification testing ");
-        NotificationService().showNotification(
-          title: "Title",
-          body: "Body",
-          id: 1,
+        // notification service
+
+        DateTime now = DateTime.now();
+        int targetMinute = now.minute + 2;
+        int targetHour = now.hour;
+
+        if (targetMinute >= 60) {
+          targetMinute -= 60;
+          targetHour = (targetHour + 1) % 24;
+        }
+
+        // Show instantly (this works)
+        NotificationService().showNotification(id: 1, title: "your Expense added to the tracker ", body: "₹${amountText.text}");
+
+        // Schedule 1 minute later
+        await NotificationService().scheduleNotification(
+          id: 2,
+          title: "Scheduled Test",
+          body: "This should show in 1 minute",
+          hour: targetHour,
+          minute: targetMinute,
         );
+
         if (formKey.currentState!.validate()) {
           // P O P  B O X
           Navigator.pop(context);
